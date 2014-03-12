@@ -1,7 +1,6 @@
 org.jrevolt.build
 =================
 
-
 Extensions
 ==========
 
@@ -79,4 +78,17 @@ Example:
 
 See: [exec-maven-plugin](http://mojo.codehaus.org/exec-maven-plugin/java-mojo.html)
 
+Distribution
+============
 
+ - [Snapshots](https://nexus.greenhorn.sk/content/repositories/snapshots/org/jrevolt/org.jrevolt.build/)
+ - [Releases](https://nexus.greenhorn.sk/content/repositories/releases/org/jrevolt/org.jrevolt.build/)
+
+
+```xml
+<dependency>
+	<groupId>org.jrevolt</groupId>
+	<artifactId>org.jrevolt.build</artifactId>
+	<version>1-SNAPSHOT</version>
+</dependency>
+```

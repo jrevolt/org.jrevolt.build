@@ -214,6 +214,7 @@ public class MavenExtension extends AbstractMavenLifecycleParticipant {
 
     String detectReleaseTag(String commitId) {
         String out = trimToNull(execute("git show-ref --tags -d"));
+		  if (out == null) { return null; }
 
         List<String> matching = new LinkedList<String>();
 

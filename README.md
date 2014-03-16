@@ -92,3 +92,10 @@ Distribution
 	<version>1-SNAPSHOT</version>
 </dependency>
 ```
+
+Installation
+============
+
+Grab latest distribution (ZIP) from Nexus and unpack it into $M2_HOME/lib/ext/.
+
+Enable the extension using -DMavenExtension=true

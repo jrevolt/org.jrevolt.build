@@ -25,84 +25,85 @@ import java.util.LinkedList;
  *
  * @author <a href="mailto:patrikbeno@gmail.com">Patrik Beno</a>
  * @version $Id$
- *
  * @goal run
  * @requiresProject false
  * @requiresDirectInvocation true
  */
 public class RunMojo extends AbstractMojo {
 
-    /**
-     * The project currently being build.
-     *
-     * @parameter default-value="${project}"
-     * @required
-     * @readonly
-     */
-    private MavenProject project;
+	/**
+	 * The project currently being build.
+	 *
+	 * @parameter default-value="${project}"
+	 * @required
+	 * @readonly
+	 */
+	private MavenProject project;
 
-    /**
-     * The current Maven session.
-     *
-     * @parameter default-value="${session}"
-     * @parameter required
-     * @readonly
-     */
-    MavenSession session;
+	/**
+	 * The current Maven session.
+	 *
+	 * @parameter default-value="${session}"
+	 * @parameter required
+	 * @readonly
+	 */
+	MavenSession session;
 
-    /**
-     * The Maven BuildPluginManager component.
-     *
-     * @component
-     * @required
-     */
-    BuildPluginManager pluginManager;
+	/**
+	 * The Maven BuildPluginManager component.
+	 *
+	 * @component
+	 * @required
+	 */
+	BuildPluginManager pluginManager;
 
-    /**
-     * @parameter default-value="${run.mainClass}"
-     * @required
-     */
-    String mainClass;
+	/**
+	 * @parameter default-value="${run.mainClass}"
+	 * @required
+	 */
+	String mainClass;
 
-    /**
-     * @parameter default-value="${run.mainArtifact}"
-     * @required
-     */
-    String mainArtifact;
+	/**
+	 * @parameter default-value="${run.mainArtifact}"
+	 * @required
+	 */
+	String mainArtifact;
 
-    @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+	@Override
+	public void execute() throws MojoExecutionException, MojoFailureException {
 
-        MojoExecutor.ExecutionEnvironment env = executionEnvironment(project, session, pluginManager);
+		MojoExecutor.ExecutionEnvironment env = executionEnvironment(project, session, pluginManager);
 
-        Dependency dependency = new Dependency(); {
-            String[] tokens = mainArtifact.split(":");
-            if (tokens.length != 4) {
-                throw new MojoFailureException("Invalid artifact definition: \""+mainArtifact+"\". Expected: groupId:artifactId:version:packaging");
-            }
+		Dependency dependency = new Dependency();
+		{
+			String[] tokens = mainArtifact.split(":");
+			if (tokens.length != 4) {
+				throw new MojoFailureException(
+						"Invalid artifact definition: \"" + mainArtifact + "\". Expected: groupId:artifactId:version:packaging");
+			}
 
-            dependency.setGroupId(tokens[0]);
-            dependency.setArtifactId(tokens[1]);
-            dependency.setVersion(tokens[2]);
-            dependency.setType(tokens[3]);
-        }
+			dependency.setGroupId(tokens[0]);
+			dependency.setArtifactId(tokens[1]);
+			dependency.setVersion(tokens[2]);
+			dependency.setType(tokens[3]);
+		}
 
-        Plugin exec = plugin("org.codehaus.mojo", "exec-maven-plugin", "1.2.1");
-        // Maven 3.1 update: original dependency list is immutable, must build a new one
-        exec.setDependencies(new LinkedList<Dependency>(exec.getDependencies()));
-        exec.addDependency(dependency);
+		Plugin exec = plugin("org.codehaus.mojo", "exec-maven-plugin", "1.2.1");
+		// Maven 3.1 update: original dependency list is immutable, must build a new one
+		exec.setDependencies(new LinkedList<Dependency>(exec.getDependencies()));
+		exec.addDependency(dependency);
 
-        executeMojo(
-                exec,
-                goal("java"),
-                configuration(
-                        element(name("mainClass"), mainClass),
-                        element(name("includeProjectDependencies"), "false"),
-                        element(name("includeProjectDependencies"), "false"),
-                        element(name("includePluginDependencies"), "true")
-                ),
-                env);
-    }
+		executeMojo(
+				exec,
+				goal("java"),
+				configuration(
+						element(name("mainClass"), mainClass),
+						element(name("includeProjectDependencies"), "false"),
+						element(name("includeProjectDependencies"), "false"),
+						element(name("includePluginDependencies"), "true")
+				),
+				env);
+	}
 
 }
 
